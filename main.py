@@ -52,14 +52,14 @@ class KupujemProdajemBot:
     RSD_TO_EUR = 117.0
 
     def __init__(self):
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    self.driver = webdriver.Chrome(options=chrome_options)
-    self.wait = WebDriverWait(self.driver, 35)
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920,1080")
+        self.driver = webdriver.Chrome(options=chrome_options)
+        self.wait = WebDriverWait(self.driver, 35)
 
     def parse_price(self, price_text: str) -> tuple[float, str] | None:
         text = price_text.strip()
