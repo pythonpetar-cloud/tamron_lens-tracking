@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser
-          sudo ln -s /usr/bin/chromium-browser /usr/bin/google-chrome
+          sudo ln -sf /usr/bin/chromium-browser /usr/bin/google-chrome
 
       - name: Run bot
         env:
