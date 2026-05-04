@@ -1,0 +1,37 @@
+name: Tamron Lens Tracker
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # runs every hour
+  workflow_dispatch:       # allows manual run from GitHub
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: railway-deploy
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install selenium python-dotenv
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+
+      - name: Run bot
+        env:
+          GMAIL_KORISNIK: ${{ secrets.GMAIL_KORISNIK }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_PRIMALAC: ${{ secrets.GMAIL_PRIMALAC }}
+          MAX_CENA_EUR: ${{ secrets.MAX_CENA_EUR }}
+        run: python main.py
