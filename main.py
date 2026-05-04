@@ -122,10 +122,6 @@ class KupujemProdajemBot:
             print("No listings below the limit — email not sent.")
 
 
-# Run every hour forever
-while True:
-    bot = KupujemProdajemBot()
-    bot.get_tamron()
-    bot.driver.quit()
-    print("Sleeping 1 hour...")
-    time.sleep(3600)
+bot = KupujemProdajemBot()
+bot.get_tamron()
+bot.driver.quit()
