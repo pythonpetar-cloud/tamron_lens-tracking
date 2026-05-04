@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -7,7 +8,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
-import time
 
 load_dotenv()
 
@@ -52,13 +52,16 @@ class KupujemProdajemBot:
     RSD_TO_EUR = 117.0
 
     def __init__(self):
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        self.driver = webdriver.Chrome(options=chrome_options)
-        self.wait = WebDriverWait(self.driver, 35)
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.binary_location = "/usr/bin/chromium-browser"
+    
+    service = webdriver.chrome.service.Service("/usr/bin/chromedriver")
+    self.driver = webdriver.Chrome(service=service, options=chrome_options)
+    self.wait = WebDriverWait(self.driver, 35)
 
     def parse_price(self, price_text: str) -> tuple[float, str] | None:
         text = price_text.strip()
