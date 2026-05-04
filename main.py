@@ -107,7 +107,7 @@ class KupujemProdajemBot:
     
                 all_listings.append({
                     "title": title,
-                    "price_text": f"{price_text}{converted}",
+                    "price_text": price_text,
                     "price_number": price_in_eur,
                     "link": link,
                     "below_limit": below,
