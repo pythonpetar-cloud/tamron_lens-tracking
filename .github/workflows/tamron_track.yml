@@ -33,5 +33,4 @@ jobs:
           GMAIL_KORISNIK: ${{ secrets.GMAIL_KORISNIK }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           GMAIL_PRIMALAC: ${{ secrets.GMAIL_PRIMALAC }}
-          MAX_CENA_EUR: ${{ secrets.MAX_CENA_EUR }}
         run: python main.py
