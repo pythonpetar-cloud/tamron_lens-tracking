@@ -14,7 +14,7 @@ load_dotenv()
 GMAIL_USER = os.getenv("GMAIL_KORISNIK")
 GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
 GMAIL_RECIPIENT = os.getenv("GMAIL_PRIMALAC")
-MAX_PRICE_EUR = float(os.getenv("MAX_CENA_EUR", "400"))
+MAX_PRICE_EUR = float(400)
 
 
 def send_email(listings: list[dict]):
