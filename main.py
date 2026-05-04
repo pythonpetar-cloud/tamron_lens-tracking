@@ -1,14 +1,13 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from dotenv import load_dotenv
-import tempfile
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+import time
 
 load_dotenv()
 
@@ -19,7 +18,6 @@ MAX_PRICE_EUR = float(os.getenv("MAX_CENA_EUR", "400"))
 
 
 def send_email(listings: list[dict]):
-    """Sends an email with a list of listings whose price is below the limit."""
     subject = f"🎯 KP: Found {len(listings)} listing(s) below {MAX_PRICE_EUR:.0f}€"
 
     lines = []
@@ -27,7 +25,7 @@ def send_email(listings: list[dict]):
         lines.append(f"• {listing['title']}")
         lines.append(f"  Price: {listing['price_text']}")
         lines.append(f"  Link: {listing['link']}")
-        lines.append("")  # empty line between listings
+        lines.append("")
 
     body = f"""Hey!
 
@@ -51,17 +49,18 @@ I found {len(listings)} listing(s) for Tamron 28-75 f2.8 below {MAX_PRICE_EUR:.0
 
 
 class KupujemProdajemBot:
-    RSD_TO_EUR = 117.0  # update as needed
+    RSD_TO_EUR = 117.0
 
     def __init__(self):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
-        chrome_options.add_experimental_option("detach", True)
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(options=chrome_options)
         self.wait = WebDriverWait(self.driver, 35)
 
     def parse_price(self, price_text: str) -> tuple[float, str] | None:
-        """Returns (price_in_eur, currency) or None if price can't be parsed."""
         text = price_text.strip()
 
         if "€" in text:
@@ -82,11 +81,9 @@ class KupujemProdajemBot:
 
     def get_tamron(self):
         self.driver.get("https://www.kupujemprodajem.com/pretraga?keywords=tamron+28-75+f2.8")
-
         self.wait.until(ec.presence_of_element_located((By.CSS_SELECTOR, "article")))
 
         listings = self.driver.find_elements(By.CSS_SELECTOR, "article")
-
         affordable = []
 
         for listing in listings:
@@ -127,3 +124,4 @@ class KupujemProdajemBot:
 
 bot = KupujemProdajemBot()
 bot.get_tamron()
+bot.driver.quit()
