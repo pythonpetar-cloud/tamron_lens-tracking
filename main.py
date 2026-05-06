@@ -97,6 +97,7 @@ class KupujemProdajemBot:
             last_height = new_height
     
         listings = self.driver.find_elements(By.CSS_SELECTOR, "article")
+        all_listings = []
     
         for listing in listings:
             try:
