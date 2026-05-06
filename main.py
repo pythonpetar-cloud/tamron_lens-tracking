@@ -8,6 +8,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+import time
 
 load_dotenv()
 
@@ -85,8 +86,17 @@ class KupujemProdajemBot:
         self.driver.get("https://www.kupujemprodajem.com/pretraga?keywords=tamron+28-75+f2.8")
         self.wait.until(ec.presence_of_element_located((By.CSS_SELECTOR, "article")))
     
+        # Scroll to load all lazy-loaded listings
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
+        while True:
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(1.5)
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break
+            last_height = new_height
+    
         listings = self.driver.find_elements(By.CSS_SELECTOR, "article")
-        all_listings = []
     
         for listing in listings:
             try:
